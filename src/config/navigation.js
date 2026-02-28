@@ -1,0 +1,83 @@
+import {
+  LayoutDashboard,
+  Frame,
+  Rocket,
+  Map,
+  ShieldAlert,
+  RefreshCw,
+  Brain,
+  FileText,
+  BookOpen,
+  Video,
+} from "lucide-react";
+
+export const navItems = [
+  {
+    path: "/",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    subtitle: "Visão geral do projeto IRIS",
+  },
+  {
+    path: "/canvas",
+    label: "Canvas",
+    icon: Frame,
+    subtitle: "Business Model Canvas do produto",
+    exportable: true,
+  },
+  {
+    path: "/mvp",
+    label: "MVP",
+    icon: Rocket,
+    subtitle: "Definição e escopo do MVP",
+    exportable: true,
+  },
+  {
+    path: "/roadmap",
+    label: "Roadmap",
+    icon: Map,
+    subtitle: "Evolução planejada do produto",
+    exportable: true,
+  },
+  {
+    path: "/riscos",
+    label: "Matriz de Riscos",
+    icon: ShieldAlert,
+    subtitle: "Riscos, impacto e mitigação",
+    exportable: true,
+  },
+  {
+    path: "/ciclo",
+    label: "Ciclo de Vida",
+    icon: RefreshCw,
+    subtitle: "Fases do produto e critérios de avanço",
+    exportable: true,
+  },
+  {
+    path: "/ia",
+    label: "Gestão & IA",
+    icon: Brain,
+    subtitle: "Riscos de IA, ética e impactos organizacionais",
+    exportable: true,
+  },
+  {
+    path: "/teoria",
+    label: "Parte Teórica",
+    icon: FileText,
+    subtitle: "Documento teórico completo",
+    action: { label: "Baixar PDF", variant: "coral" },
+  },
+  {
+    path: "/readme",
+    label: "README",
+    icon: BookOpen,
+    subtitle: "Lógica do planejamento e interpretação dos artefatos",
+  },
+  {
+    path: "/pitch",
+    label: "Vídeo Pitch",
+    icon: Video,
+    subtitle: "Apresentação executiva do projeto",
+    action: { label: "Assistir Pitch", variant: "coral" },
+  },
+];
