@@ -49,7 +49,7 @@ export function createDocument(meta = {}) {
 /* ── Header ────────────────────────────────────────────── */
 
 export function addHeader(doc, { title, subtitle }) {
-  const date = new Date().toLocaleDateString("pt-BR");
+  const date = "28/02/2026";
   const y = MARGIN.top;
 
   // Background bar
