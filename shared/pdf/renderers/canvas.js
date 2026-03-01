@@ -121,6 +121,7 @@ function measureCardHeight(doc, item, innerW) {
 function drawFixedCard(doc, x, y, item, width, height, color) {
   const padding = 10;
   const innerW = width - padding * 2;
+  const maxTextY = y + height - padding;
 
   // Border
   doc
@@ -138,24 +139,27 @@ function drawFixedCard(doc, x, y, item, width, height, color) {
     .font("Helvetica-Bold")
     .fontSize(8)
     .fillColor(COLORS.navy)
-    .text(item.title, x + padding + 4, textY, { width: innerW - 4 });
+    .text(item.title, x + padding + 4, textY, { width: innerW - 4, height: maxTextY - textY });
   textY = doc.y + 4;
 
   // Content
   if (typeof item.content === "string") {
-    doc
-      .font("Helvetica")
-      .fontSize(7.5)
-      .fillColor(COLORS.slate)
-      .text(item.content, x + padding + 4, textY, { width: innerW - 4, lineGap: 2 });
+    if (textY < maxTextY) {
+      doc
+        .font("Helvetica")
+        .fontSize(7.5)
+        .fillColor(COLORS.slate)
+        .text(item.content, x + padding + 4, textY, { width: innerW - 4, height: maxTextY - textY, lineGap: 2 });
+    }
   } else if (Array.isArray(item.content)) {
     for (const line of item.content) {
+      if (textY >= maxTextY) break;
       doc.circle(x + padding + 7, textY + 4, 1.5).fill(color);
       doc
         .font("Helvetica")
         .fontSize(7.5)
         .fillColor(COLORS.slate)
-        .text(line, x + padding + 14, textY, { width: innerW - 14, lineGap: 2 });
+        .text(line, x + padding + 14, textY, { width: innerW - 14, height: maxTextY - textY, lineGap: 2 });
       textY = doc.y + 3;
     }
   }

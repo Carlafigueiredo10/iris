@@ -305,6 +305,7 @@ export function drawTable(doc, y, { columns, rows, options = {} }) {
         .fillColor(COLORS.slate)
         .text(val, x + 5, y + 6, {
           width: colWidths[i] - 10,
+          height: actualHeight - 8,
           align: columns[i].align || "left",
         });
       x += colWidths[i];
@@ -344,20 +345,25 @@ export function drawCard(doc, y, { title, content, color = COLORS.teal, width = 
   const padding = 10;
   const innerWidth = width - padding * 2;
 
-  // Measure content height
+  // Measure content height accurately
   const titleH = doc
     .font("Helvetica-Bold")
     .fontSize(8)
-    .heightOfString(title, { width: innerWidth });
+    .heightOfString(title, { width: innerWidth - 4 });
 
   let contentH = 0;
   if (typeof content === "string") {
     contentH = doc
       .font("Helvetica")
       .fontSize(7.5)
-      .heightOfString(content, { width: innerWidth });
+      .heightOfString(content, { width: innerWidth - 4, lineGap: 2 });
   } else if (Array.isArray(content)) {
-    contentH = content.length * 14;
+    for (const item of content) {
+      contentH += doc
+        .font("Helvetica")
+        .fontSize(7.5)
+        .heightOfString(item, { width: innerWidth - 14, lineGap: 2 }) + 6;
+    }
   }
 
   const totalH = titleH + contentH + padding * 2 + 8;
@@ -373,31 +379,35 @@ export function drawCard(doc, y, { title, content, color = COLORS.teal, width = 
   // Left accent
   doc.rect(x, y + 4, 3, totalH - 8).fill(color);
 
+  const maxTextY = y + totalH - padding;
+
   // Title
   let textY = y + padding;
   doc
     .font("Helvetica-Bold")
     .fontSize(8)
     .fillColor(COLORS.navy)
-    .text(title, x + padding + 4, textY, { width: innerWidth - 4 });
+    .text(title, x + padding + 4, textY, { width: innerWidth - 4, height: maxTextY - textY });
   textY = doc.y + 4;
 
   // Content
   if (typeof content === "string") {
-    doc
-      .font("Helvetica")
-      .fontSize(7.5)
-      .fillColor(COLORS.slate)
-      .text(content, x + padding + 4, textY, { width: innerWidth - 4, lineGap: 2 });
-    textY = doc.y;
+    if (textY < maxTextY) {
+      doc
+        .font("Helvetica")
+        .fontSize(7.5)
+        .fillColor(COLORS.slate)
+        .text(content, x + padding + 4, textY, { width: innerWidth - 4, height: maxTextY - textY, lineGap: 2 });
+    }
   } else if (Array.isArray(content)) {
     for (const item of content) {
+      if (textY >= maxTextY) break;
       doc.circle(x + padding + 7, textY + 4, 1.5).fill(color);
       doc
         .font("Helvetica")
         .fontSize(7.5)
         .fillColor(COLORS.slate)
-        .text(item, x + padding + 14, textY, { width: innerWidth - 14, lineGap: 2 });
+        .text(item, x + padding + 14, textY, { width: innerWidth - 14, height: maxTextY - textY, lineGap: 2 });
       textY = doc.y + 3;
     }
   }
@@ -439,6 +449,7 @@ export function drawHighlightBlock(doc, y, text, options = {}) {
     .fillColor(COLORS.navy)
     .text(text, MARGIN.left + padding + 4, y + padding, {
       width: innerW - 8,
+      height: totalH - padding,
       lineGap: 3,
     });
 
@@ -469,6 +480,7 @@ export function drawFooterNote(doc, y, text) {
     .fillColor(COLORS.slate)
     .text(text, MARGIN.left + padding, y + padding, {
       width: innerW,
+      height: totalH - padding,
       align: "center",
       lineGap: 2,
     });
