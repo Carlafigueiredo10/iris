@@ -1,6 +1,7 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import {
   X,
+  ArrowLeft,
   LayoutGrid,
   StickyNote,
   Target,
@@ -74,8 +75,20 @@ export default function Sidebar({ mobileOpen, onClose }) {
           </button>
         </div>
 
+        {/* Back to landing */}
+        <div className="px-4 pt-6 md:pt-8">
+          <Link
+            to="/"
+            onClick={onClose}
+            className="group flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-slate-500 hover:text-slate-900 transition-colors"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Página Principal
+          </Link>
+        </div>
+
         {/* Nav */}
-        <nav className="px-3 pt-8 md:pt-10 flex-1 overflow-y-auto [scrollbar-width:thin] [scrollbar-color:rgba(15,23,42,0.12)_transparent]">
+        <nav className="px-3 pt-5 flex-1 overflow-y-auto [scrollbar-width:thin] [scrollbar-color:rgba(15,23,42,0.12)_transparent]">
           <ul className="space-y-1.5 pb-6">
             {NAV.map(({ label, path, icon: Icon, external }) => (
               <li key={path}>
@@ -185,16 +198,6 @@ export default function Sidebar({ mobileOpen, onClose }) {
           </ul>
         </nav>
 
-        {/* Footer */}
-        <div className="px-7 pb-8 pt-6">
-          <div className="h-px w-full bg-slate-900/10 mb-6" />
-          <div className="text-[10px] uppercase tracking-[0.28em] text-slate-500">
-            Infraestrutura
-          </div>
-          <div className="mt-2 text-xs text-slate-600 leading-relaxed">
-            Consolidação &bull; Governança &bull; Evolução
-          </div>
-        </div>
       </aside>
     </>
   );
