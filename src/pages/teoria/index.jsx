@@ -1,6 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { Skeleton } from "@/components/Skeleton";
 import { Connections } from "@/components/Connections";
+import { Download } from "lucide-react";
 
 export default function TeoriaPage() {
   return (
@@ -8,8 +9,12 @@ export default function TeoriaPage() {
       <PageHeader
         title="Parte Teórica"
         subtitle="Documento teórico completo — Visão, MVP, Roadmap, Ciclo de Vida, Riscos e IA"
-        action={{ label: "Baixar PDF", variant: "coral" }}
-        onAction={() => {/* TODO: download PDF file */}}
+        action={{
+          label: "Baixar PDF",
+          variant: "coral",
+          icon: <Download size={16} />,
+          onClick: () => {/* TODO: download PDF file */},
+        }}
       />
       <div>
         <Skeleton rows={8} />

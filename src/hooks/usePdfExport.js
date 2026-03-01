@@ -1,36 +1,51 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
+/**
+ * PDF export via Vercel Serverless Function.
+ * POST /api/pdfs/artefatos/:tipo → application/pdf stream.
+ * Zero dependencia de DOM/canvas — PDF gerado programaticamente no backend.
+ */
 export function usePdfExport() {
-  const exportToPdf = useCallback(async (elementId, filename = "export.pdf") => {
-    const element = document.querySelector(`[data-export="pdf"]#${elementId}`) 
-      || document.getElementById(elementId);
-    
-    if (!element) {
-      console.error(`Element with id "${elementId}" not found`);
+  const [isExporting, setIsExporting] = useState(false);
+  const [error, setError] = useState(null);
+
+  const exportToPdf = useCallback(async ({ tipo, filename }) => {
+    if (!tipo) {
+      console.error("usePdfExport: tipo is required");
       return;
     }
 
-    const html2pdf = (await import("html2pdf.js")).default;
+    setIsExporting(true);
+    setError(null);
 
-    const opt = {
-      margin: [10, 10, 10, 10],
-      filename,
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { 
-        scale: 2, 
-        useCORS: true,
-        letterRendering: true,
-      },
-      jsPDF: { 
-        unit: "mm", 
-        format: "a4", 
-        orientation: "portrait" 
-      },
-      pagebreak: { mode: ["avoid-all", "css", "legacy"] },
-    };
+    try {
+      const response = await fetch(`/api/pdfs/artefatos/${tipo}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
 
-    await html2pdf().set(opt).from(element).save();
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        throw new Error(body.error || `Falha ao gerar PDF (${response.status})`);
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename || "iris-export.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err.message);
+      console.error("PDF export failed:", err);
+    } finally {
+      setIsExporting(false);
+    }
   }, []);
 
-  return { exportToPdf };
+  return { exportToPdf, isExporting, error };
 }

@@ -1,6 +1,4 @@
-import { Download, ExternalLink } from "lucide-react";
-
-export function PageHeader({ title, subtitle, action, onAction }) {
+export function PageHeader({ title, subtitle, action }) {
   return (
     <div className="flex items-start justify-between gap-6 mb-8">
       <div>
@@ -11,16 +9,18 @@ export function PageHeader({ title, subtitle, action, onAction }) {
       </div>
       {action && (
         <button
-          onClick={onAction}
+          onClick={action.onClick}
+          disabled={action.disabled}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 flex-shrink-0 ${
-            action.variant === "coral"
-              ? "bg-coral text-white hover:bg-coral/90 shadow-sm shadow-coral/25"
-              : "bg-teal text-white hover:bg-teal-dark shadow-sm shadow-teal/25"
+            action.disabled
+              ? "bg-slate-light/50 text-white cursor-not-allowed"
+              : action.variant === "coral"
+                ? "bg-coral text-white hover:bg-coral/90 shadow-sm shadow-coral/25"
+                : "bg-teal text-white hover:bg-teal-dark shadow-sm shadow-teal/25"
           }`}
         >
-          {action.variant === "coral" && action.label.includes("PDF") && <Download size={16} />}
-          {action.variant === "coral" && action.label.includes("Pitch") && <ExternalLink size={16} />}
-          {action.label}
+          {action.icon}
+          {action.disabled ? "Gerando..." : action.label}
         </button>
       )}
     </div>

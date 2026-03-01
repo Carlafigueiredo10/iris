@@ -13,7 +13,7 @@ import {
 
 export const navItems = [
   {
-    path: "/",
+    path: "/painel",
     label: "Dashboard",
     icon: LayoutDashboard,
     subtitle: "Visão geral do projeto IRIS",

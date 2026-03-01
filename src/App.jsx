@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppLayout } from "@/components/AppLayout";
+import LandingPage from "@/pages/landing";
 import DashboardPage from "@/pages/dashboard";
 import CanvasPage from "@/pages/canvas";
 import MvpPage from "@/pages/mvp";
@@ -10,13 +11,15 @@ import IaPage from "@/pages/ia";
 import TeoriaPage from "@/pages/teoria";
 import ReadmePage from "@/pages/readme";
 import PitchPage from "@/pages/pitch";
+import NotFoundPage from "@/pages/not-found";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route element={<AppLayout />}>
-          <Route index element={<DashboardPage />} />
+          <Route path="painel" element={<DashboardPage />} />
           <Route path="canvas" element={<CanvasPage />} />
           <Route path="mvp" element={<MvpPage />} />
           <Route path="roadmap" element={<RoadmapPage />} />
@@ -26,6 +29,7 @@ export default function App() {
           <Route path="teoria" element={<TeoriaPage />} />
           <Route path="readme" element={<ReadmePage />} />
           <Route path="pitch" element={<PitchPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

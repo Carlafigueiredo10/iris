@@ -1,53 +1,117 @@
-import { PageHeader } from "@/components/PageHeader";
-import { Connections } from "@/components/Connections";
-import { navItems } from "@/config/navigation";
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
-export default function DashboardPage() {
-  const artifacts = navItems.filter((n) => n.path !== "/");
+const EASE = [0.22, 1, 0.36, 1];
 
+function Metric({ value, label }) {
   return (
-    <div>
-      <PageHeader
-        title="IRIS — Painel do Projeto"
-        subtitle="Inteligência de Relacionamento Integrado Seguro. Navegue pelos artefatos do planejamento estratégico."
-      />
+    <div className="flex flex-col">
+      <div className="text-3xl font-medium tracking-tight">{value}</div>
+      <div className="mt-2 text-xs uppercase tracking-[0.24em] text-slate-500">
+        {label}
+      </div>
+    </div>
+  );
+}
 
-      {/* Quick stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white rounded-lg border border-slate-dark/[0.06] p-5">
-          <p className="text-xs font-semibold text-slate-light uppercase tracking-wider">Artefatos</p>
-          <p className="text-3xl font-bold text-navy mt-1">{artifacts.length}</p>
-        </div>
-        <div className="bg-white rounded-lg border border-slate-dark/[0.06] p-5">
-          <p className="text-xs font-semibold text-slate-light uppercase tracking-wider">Fases do Roadmap</p>
-          <p className="text-3xl font-bold text-navy mt-1">3</p>
-        </div>
-        <div className="bg-white rounded-lg border border-slate-dark/[0.06] p-5">
-          <p className="text-xs font-semibold text-slate-light uppercase tracking-wider">Riscos Mapeados</p>
-          <p className="text-3xl font-bold text-navy mt-1">7</p>
-        </div>
+function PillarCard({ title, description, route, large = false, navigate }) {
+  return (
+    <motion.div
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.35, ease: EASE }}
+      onClick={() => navigate(route)}
+      className={`cursor-pointer border border-slate-900/10 bg-white rounded-2xl p-8 ${
+        large ? "col-span-1 md:col-span-2" : ""
+      }`}
+    >
+      <div className="text-sm uppercase tracking-[0.24em] text-slate-500">
+        Pilar
       </div>
 
-      {/* Artifact grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {artifacts.map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className="group bg-white rounded-lg border border-slate-dark/[0.06] p-5 hover:border-teal/30 hover:shadow-sm transition-all duration-200"
-          >
-            <div className="flex items-start justify-between">
-              <div className="w-9 h-9 rounded-lg bg-ice-warm flex items-center justify-center group-hover:bg-teal/10 transition-colors">
-                <item.icon size={18} className="text-slate group-hover:text-teal transition-colors" />
-              </div>
-              <ArrowRight size={16} className="text-slate-light/40 group-hover:text-teal group-hover:translate-x-0.5 transition-all mt-1" />
-            </div>
-            <h3 className="font-semibold text-navy mt-3 text-sm">{item.label}</h3>
-            <p className="text-xs text-slate-light mt-1 leading-relaxed">{item.subtitle}</p>
-          </Link>
-        ))}
+      <h2 className="mt-4 text-2xl font-medium tracking-tight">{title}</h2>
+
+      <p className="mt-4 text-slate-600 leading-relaxed max-w-xl">
+        {description}
+      </p>
+
+      <div className="mt-8 h-px w-full bg-slate-900/10" />
+
+      <div className="mt-4 text-xs text-slate-500 uppercase tracking-[0.24em]">
+        Explorar &rarr;
+      </div>
+    </motion.div>
+  );
+}
+
+export default function DashboardPage() {
+  const navigate = useNavigate();
+
+  return (
+    <div className="min-h-screen px-10 py-16 text-slate-900">
+      {/* Header Executivo */}
+      <div className="mb-20">
+        <div className="text-xs uppercase tracking-[0.28em] text-slate-500">
+          Infraestrutura Estratégica
+        </div>
+
+        <h1 className="mt-4 text-4xl font-medium tracking-tight">
+          Planning Console
+        </h1>
+
+        <p className="mt-6 text-slate-600 max-w-2xl leading-relaxed">
+          Fundação segura e inteligência estruturada para decisões executivas.
+          Consolidação antes de predição. Governança antes de automação.
+        </p>
+
+        <div className="mt-10 h-px w-full bg-slate-900/10" />
+      </div>
+
+      {/* Métricas */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-24">
+        <Metric value="90%" label="Registros Consolidados" />
+        <Metric value="2 / 2" label="Canais Integrados" />
+        <Metric value="Estruturada" label="Governança" />
+        <Metric value="Controlado" label="Risco Regulatório" />
+      </div>
+
+      {/* Pilares */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <PillarCard
+          large
+          title="Estratégia"
+          description="Visão de produto, Canvas e fundamentos estruturais que sustentam a arquitetura do IRIS."
+          route="/canvas"
+          navigate={navigate}
+        />
+
+        <PillarCard
+          title="Execução"
+          description="Definição do MVP, critérios de aceitação e ciclo de vida planejado."
+          route="/mvp"
+          navigate={navigate}
+        />
+
+        <PillarCard
+          title="Riscos & Conformidade"
+          description="Matriz de riscos, mitigação estruturada e aderência regulatória."
+          route="/riscos"
+          navigate={navigate}
+        />
+
+        <PillarCard
+          title="Evolução"
+          description="Roadmap progressivo e estratégia de inteligência adaptativa supervisionada."
+          route="/roadmap"
+          navigate={navigate}
+        />
+      </div>
+
+      {/* Rodapé estrutural */}
+      <div className="mt-28">
+        <div className="h-px w-full bg-slate-900/10" />
+        <div className="mt-6 text-xs text-slate-500 uppercase tracking-[0.22em]">
+          IRIS &bull; Infraestrutura de Inteligência Estruturada
+        </div>
       </div>
     </div>
   );
