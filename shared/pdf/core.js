@@ -74,19 +74,21 @@ export function addHeader(doc, { title, subtitle }) {
     .fill(COLORS.teal);
 
   // Logo
+  const logoW = 30;
   try {
-    doc.image(getLogoBuffer(), MARGIN.left + 10, y + 7, { height: 28 });
+    doc.image(getLogoBuffer(), MARGIN.left + 8, y + 8, { height: 28 });
   } catch {
     // logo decode failed — skip silently
   }
 
-  // Title text
+  // Title text (offset past logo)
+  const textX = MARGIN.left + 8 + logoW + 10;
   doc
     .font("Helvetica-Bold")
     .fontSize(11)
     .fillColor(COLORS.navy)
-    .text(title, MARGIN.left + 48, y + 10, {
-      width: CONTENT_WIDTH - 130,
+    .text(title, textX, y + 10, {
+      width: CONTENT_WIDTH - (textX - MARGIN.left) - 80,
     });
 
   // Subtitle
@@ -95,8 +97,8 @@ export function addHeader(doc, { title, subtitle }) {
       .font("Helvetica")
       .fontSize(7)
       .fillColor(COLORS.slateLight)
-      .text(subtitle, MARGIN.left + 48, y + 25, {
-        width: CONTENT_WIDTH - 130,
+      .text(subtitle, textX, y + 25, {
+        width: CONTENT_WIDTH - (textX - MARGIN.left) - 80,
       });
   }
 
