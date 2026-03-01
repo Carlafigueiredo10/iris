@@ -4,3 +4,5 @@ export { render as mvp } from "./mvp.js";
 export { render as roadmap } from "./roadmap.js";
 export { render as ciclo } from "./ciclo.js";
 export { render as ia } from "./ia.js";
+export { render as teoria } from "./teoria.js";
+export { render as readme } from "./readme.js";

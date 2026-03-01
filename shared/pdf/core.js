@@ -1,5 +1,4 @@
 import PDFDocument from "pdfkit";
-import { LOGO_PNG_BASE64 } from "./logo.js";
 
 /* ── Design tokens (IRIS) ──────────────────────────────── */
 
@@ -45,16 +44,6 @@ export function createDocument(meta = {}) {
     },
   });
   return doc;
-}
-
-/* ── Logo buffer (from base64) ─────────────────────────── */
-
-let _logoBuffer = null;
-function getLogoBuffer() {
-  if (!_logoBuffer) {
-    _logoBuffer = Buffer.from(LOGO_PNG_BASE64, "base64");
-  }
-  return _logoBuffer;
 }
 
 /* ── Header ────────────────────────────────────────────── */

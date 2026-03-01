@@ -4,6 +4,8 @@ export { meta as mvpMeta } from "./mvp.js";
 export { meta as roadmapMeta } from "./roadmap.js";
 export { meta as cicloMeta } from "./ciclo.js";
 export { meta as iaMeta } from "./ia.js";
+export { meta as teoriaMeta } from "./teoria.js";
+export { meta as readmeMeta } from "./readme.js";
 
 import { meta as riscosMeta } from "./riscos.js";
 import { meta as canvasMeta } from "./canvas.js";
@@ -11,6 +13,8 @@ import { meta as mvpMeta } from "./mvp.js";
 import { meta as roadmapMeta } from "./roadmap.js";
 import { meta as cicloMeta } from "./ciclo.js";
 import { meta as iaMeta } from "./ia.js";
+import { meta as teoriaMeta } from "./teoria.js";
+import { meta as readmeMeta } from "./readme.js";
 
 export const registry = {
   riscos: riscosMeta,
@@ -19,4 +23,6 @@ export const registry = {
   roadmap: roadmapMeta,
   ciclo: cicloMeta,
   ia: iaMeta,
+  teoria: teoriaMeta,
+  readme: readmeMeta,
 };

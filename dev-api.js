@@ -6,7 +6,7 @@ import { createServer } from "http";
 import { registry } from "./shared/data/index.js";
 import * as renderers from "./shared/pdf/renderers/index.js";
 
-const VALID_TIPOS = ["canvas", "mvp", "roadmap", "riscos", "ciclo", "ia"];
+const VALID_TIPOS = ["canvas", "mvp", "roadmap", "riscos", "ciclo", "ia", "teoria", "readme"];
 const PORT = 3001;
 
 const server = createServer(async (req, res) => {

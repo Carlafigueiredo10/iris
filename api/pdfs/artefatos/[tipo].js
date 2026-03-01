@@ -1,7 +1,7 @@
 import { registry } from "../../../shared/data/index.js";
 import * as renderers from "../../../shared/pdf/renderers/index.js";
 
-const VALID_TIPOS = ["canvas", "mvp", "roadmap", "riscos", "ciclo", "ia"];
+const VALID_TIPOS = ["canvas", "mvp", "roadmap", "riscos", "ciclo", "ia", "teoria", "readme"];
 
 export const config = {
   runtime: "nodejs",
