@@ -20,6 +20,14 @@ function cn(...classes) {
 const NAV = [
   { label: "Dashboard", path: "/painel", icon: LayoutGrid },
 
+  // Vídeo Pitch
+  {
+    label: "Vídeo Pitch",
+    path: "https://drive.google.com/file/d/1EbwX5x_L7xE733Q2pS8ERj_CXpAdtHcT/view?usp=sharing",
+    icon: Video,
+    external: true,
+  },
+
   // Parte Teórica
   { label: "Parte Teórica", path: "/teoria", icon: BookOpen },
 
@@ -31,14 +39,6 @@ const NAV = [
 
   // Complementares
   { label: "README", path: "/readme", icon: FileText },
-
-  // Vídeo externo
-  {
-    label: "Vídeo Pitch",
-    path: "https://youtube.com/SEU_LINK",
-    icon: Video,
-    external: true,
-  },
 ];
 
 export default function Sidebar({ mobileOpen, onClose }) {
@@ -102,16 +102,17 @@ export default function Sidebar({ mobileOpen, onClose }) {
                       "group relative flex items-center gap-3",
                       "rounded-xl px-4 py-3",
                       "transition-colors",
+                      "border border-blue-400/30",
                       "text-slate-700 hover:text-slate-900"
                     )}
                   >
                     <span
                       className={cn(
                         "inline-flex h-9 w-9 items-center justify-center rounded-lg",
-                        "border border-slate-900/10",
+                        "border border-blue-400/30",
                         "bg-white/55 backdrop-blur-[2px]",
                         "transition",
-                        "group-hover:border-slate-900/15 group-hover:bg-white"
+                        "group-hover:border-blue-400/50 group-hover:bg-white"
                       )}
                       aria-hidden="true"
                     >
@@ -122,12 +123,12 @@ export default function Sidebar({ mobileOpen, onClose }) {
                       <div className="text-sm font-medium tracking-tight">
                         {label}
                       </div>
-                      <div className="mt-0.5 text-[10px] uppercase tracking-[0.26em] text-slate-500">
-                        Externo
+                      <div className="mt-0.5 text-[10px] uppercase tracking-[0.26em] text-blue-500">
+                        Entrega Final
                       </div>
                     </div>
 
-                    <ExternalLink className="h-3.5 w-3.5 text-slate-400" />
+                    <ExternalLink className="h-3.5 w-3.5 text-blue-400" />
                   </a>
                 ) : (
                   <NavLink
