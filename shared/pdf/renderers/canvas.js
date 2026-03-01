@@ -5,7 +5,6 @@ import {
   addFooters,
   drawSectionHeader,
   drawHighlightBlock,
-  drawCard,
   drawNumberedList,
   drawFooterNote,
   ensureSpace,
@@ -13,6 +12,7 @@ import {
   COLORS,
   MARGIN,
   CONTENT_WIDTH,
+  PAGE_BOTTOM,
 } from "../core.js";
 import {
   blocks,
@@ -87,55 +87,103 @@ export function render(meta) {
   return doc;
 }
 
+/* ── Helper: measure card height accurately ───────────── */
+
+function measureCardHeight(doc, item, innerW) {
+  const padding = 10;
+
+  const titleH = doc
+    .font("Helvetica-Bold")
+    .fontSize(8)
+    .heightOfString(item.title, { width: innerW - 4 });
+
+  let contentH = 0;
+  if (typeof item.content === "string") {
+    contentH = doc
+      .font("Helvetica")
+      .fontSize(7.5)
+      .heightOfString(item.content, { width: innerW - 14, lineGap: 2 });
+  } else if (Array.isArray(item.content)) {
+    for (const line of item.content) {
+      const lineH = doc
+        .font("Helvetica")
+        .fontSize(7.5)
+        .heightOfString(line, { width: innerW - 14, lineGap: 2 });
+      contentH += lineH + 6;
+    }
+  }
+
+  return titleH + contentH + padding * 2 + 8;
+}
+
+/* ── Helper: draw a single card with fixed height ─────── */
+
+function drawFixedCard(doc, x, y, item, width, height, color) {
+  const padding = 10;
+  const innerW = width - padding * 2;
+
+  // Border
+  doc
+    .roundedRect(x, y, width, height, 4)
+    .lineWidth(1)
+    .strokeColor(color)
+    .stroke();
+
+  // Left accent
+  doc.rect(x, y + 4, 3, height - 8).fill(color);
+
+  // Title
+  let textY = y + padding;
+  doc
+    .font("Helvetica-Bold")
+    .fontSize(8)
+    .fillColor(COLORS.navy)
+    .text(item.title, x + padding + 4, textY, { width: innerW - 4 });
+  textY = doc.y + 4;
+
+  // Content
+  if (typeof item.content === "string") {
+    doc
+      .font("Helvetica")
+      .fontSize(7.5)
+      .fillColor(COLORS.slate)
+      .text(item.content, x + padding + 4, textY, { width: innerW - 4, lineGap: 2 });
+  } else if (Array.isArray(item.content)) {
+    for (const line of item.content) {
+      doc.circle(x + padding + 7, textY + 4, 1.5).fill(color);
+      doc
+        .font("Helvetica")
+        .fontSize(7.5)
+        .fillColor(COLORS.slate)
+        .text(line, x + padding + 14, textY, { width: innerW - 14, lineGap: 2 });
+      textY = doc.y + 3;
+    }
+  }
+}
+
 /* ── Helper: draw a row of cards side by side ─────────── */
 
 function drawCardRow(doc, y, items, cols) {
   if (!items.length) return y;
 
-  const layout = columnLayout(cols);
+  const layout = columnLayout(cols, 8);
+  const innerW = layout[0].width - 20;
 
-  // Measure max card height
+  // Measure max height across all cards in this row
   let maxH = 0;
-  const heights = items.map((item) => {
-    const c = colorMap[item.color] || COLORS.teal;
-    const w = layout[0].width;
-    const innerW = w - 24;
-
-    const titleH = doc
-      .font("Helvetica-Bold")
-      .fontSize(8)
-      .heightOfString(item.title, { width: innerW });
-
-    let contentH = 0;
-    if (typeof item.content === "string") {
-      contentH = doc
-        .font("Helvetica")
-        .fontSize(7.5)
-        .heightOfString(item.content, { width: innerW });
-    } else if (Array.isArray(item.content)) {
-      contentH = item.content.length * 14;
-    }
-
-    const h = titleH + contentH + 28;
+  for (const item of items) {
+    const h = measureCardHeight(doc, item, innerW);
     if (h > maxH) maxH = h;
-    return h;
-  });
+  }
 
   y = ensureSpace(doc, y, maxH + 4);
 
-  // Draw cards
+  // Draw cards with uniform height
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
     const c = colorMap[item.color] || COLORS.teal;
     const col = layout[i];
-
-    drawCard(doc, y, {
-      title: item.title,
-      content: item.content,
-      color: c,
-      width: col.width,
-      x: col.x,
-    });
+    drawFixedCard(doc, col.x, y, item, col.width, maxH, c);
   }
 
   return y + maxH + 8;
