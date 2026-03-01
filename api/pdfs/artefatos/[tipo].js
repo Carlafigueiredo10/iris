@@ -4,7 +4,7 @@ import * as renderers from "../../../shared/pdf/renderers/index.js";
 const VALID_TIPOS = ["canvas", "mvp", "roadmap", "riscos", "ciclo", "ia"];
 
 export const config = {
-  runtime: "nodejs22.x",
+  runtime: "nodejs",
 };
 
 export default async function handler(req, res) {
